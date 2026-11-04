@@ -111,7 +111,8 @@ def parse_components(version: str = "master"):
                 components_with_tests.append(entry.name)
 
         sys.path.append(core_path)
-        from script.hassfest.model import Config, Integration  # type: ignore
+        from packages.hassfest.hassfest.model import (Config,  # type: ignore
+                                                      Integration)
 
         config = Config(
             root=pathlib.Path(core_path),

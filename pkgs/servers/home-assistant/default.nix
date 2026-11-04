@@ -3,6 +3,7 @@
   lib,
   callPackage,
   coreutils,
+  unzip,
   fetchFromGitHub,
   fetchPypi,
   python314Packages,
@@ -122,10 +123,12 @@ let
 
       # internal python packages only consumed by home-assistant itself
       gazetteer-matcher = self.callPackage ./python-modules/gazetteer-matcher { };
+      hassfest = self.callPackage ./python-modules/hassfest { };
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
       homeassistant = self.toPythonModule home-assistant;
+      pytest-homeassistant = self.callPackage ./python-modules/pytest-homeassistant { };
       pytest-homeassistant-custom-component =
         self.callPackage ./pytest-homeassistant-custom-component.nix
           { };
@@ -152,7 +155,7 @@ let
   extraBuildInputs = extraPackages python3Packages;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2026.10.4";
+  hassVersion = "2026.11.0";
 
 in
 python3Packages.buildPythonApplication rec {
@@ -173,14 +176,21 @@ python3Packages.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-RMjpLX8zFslvCkR6jYeinBpbKKYdiC+gdff90S4Dz4w=";
+    hash = "sha256-NYGt64VZiAZSVViO6pgjx7fBk9YgIDMDmKLNSFVsw6Q=";
   };
 
-  # Secondary source is pypi sdist for translations
-  sdist = fetchPypi {
+  # Secondary source is pypi wheel for translations
+  wheel = fetchPypi {
     inherit pname version;
-    hash = "sha256-hBD+y0NKuUs/dyTNgFhAUPDO64VsFu5wICwkA31iI4o=";
+    hash = "sha256-fKX73p3qh5rHcjlJ/IQ0eqxRguYwnDV7Lklz/TkbAPc=";
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
   };
+
+  nativeBuildInputs = [
+    unzip
+  ];
 
   build-system = with python3Packages; [
     setuptools
@@ -188,13 +198,16 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  # extract translations from pypi sdist
+  # extract translations from wheel
   prePatch = ''
-    tar --extract --gzip --file $sdist --strip-components 1 --wildcards "**/translations"
+    unzip "$wheel" '**/translations/*' -d .
   '';
 
   # leave this in, so users don't have to constantly update their downstream patch handling
   patches = [
+    # Skip environment check
+    ./patches/skip-environment-check.patch
+
     # Follow symlinks in /var/lib/hass/www
     ./patches/static-follow-symlinks.patch
 
@@ -260,7 +273,7 @@ python3Packages.buildPythonApplication rec {
     hass-nabucasa
     home-assistant-bluetooth
     home-assistant-intents
-    httpx
+    httpx2
     ifaddr
     infrared-protocols
     jinja2
@@ -275,6 +288,7 @@ python3Packages.buildPythonApplication rec {
     pyjwt
     pymicro-vad
     pyopenssl
+    pyserial
     pyspeex-noise
     python-slugify
     pyturbojpeg
@@ -285,6 +299,7 @@ python3Packages.buildPythonApplication rec {
     sqlalchemy
     standard-aifc
     standard-telnetlib
+    truststore
     typing-extensions
     ulid-transform
     urllib3
@@ -306,10 +321,13 @@ python3Packages.buildPythonApplication rec {
 
   requirementsTest = with python3Packages; [
     # test infrastructure (selectively from requirement_test.txt)
+    hassfest
+    pytest-homeassistant
     freezegun
     pytest-asyncio
     pytest-aiohttp
     pytest-freezer
+    pytest-homeassistant
     pytest-socket
     pytest-timeout
     pytest-unordered
@@ -357,10 +375,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   disabledTestPaths = [
-    # we neither run nor distribute hassfest
-    "tests/hassfest"
     # we don't care about code quality
     "tests/pylint"
+    "tests/script"
     # redundant component import test, which would make debugpy & sentry expensive to review
     "tests/test_circular_imports.py"
     # don't bulk test all components
