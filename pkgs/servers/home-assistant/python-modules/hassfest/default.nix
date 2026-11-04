@@ -20,6 +20,8 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
+  pythonImportsCheck = [ "hassfest" ];
+
   nativeCheckInputs = [
     pytestCheckHook
     ruff
