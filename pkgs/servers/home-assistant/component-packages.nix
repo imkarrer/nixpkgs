@@ -2996,9 +2996,10 @@
         ha-silabs-firmware-client
         ifaddr
         psutil-home-assistant
+        pygbl
         serialx
         universal-silabs-flasher
-      ]; # missing inputs: pygbl
+      ];
     "homeassistant_green" =
       ps: with ps; [
         aiohasupervisor
@@ -3006,18 +3007,20 @@
         ha-silabs-firmware-client
         ifaddr
         psutil-home-assistant
+        pygbl
         serialx
         universal-silabs-flasher
-      ]; # missing inputs: pygbl
+      ];
     "homeassistant_hardware" =
       ps: with ps; [
         aiohasupervisor
         aiousbwatcher
         ha-silabs-firmware-client
         ifaddr
+        pygbl
         serialx
         universal-silabs-flasher
-      ]; # missing inputs: pygbl
+      ];
     "homeassistant_sky_connect" =
       ps: with ps; [
         aiohasupervisor
@@ -3025,9 +3028,10 @@
         ha-silabs-firmware-client
         ifaddr
         psutil-home-assistant
+        pygbl
         serialx
         universal-silabs-flasher
-      ]; # missing inputs: pygbl
+      ];
     "homeassistant_yellow" =
       ps: with ps; [
         aiohasupervisor
@@ -3035,9 +3039,10 @@
         ha-silabs-firmware-client
         ifaddr
         psutil-home-assistant
+        pygbl
         serialx
         universal-silabs-flasher
-      ]; # missing inputs: pygbl
+      ];
     "homee" =
       ps: with ps; [
         pyhomee
@@ -5620,6 +5625,7 @@
         ha-silabs-firmware-client
         ifaddr
         psutil-home-assistant
+        pygbl
         pyroute2
         python-otbr-api
         serialx
@@ -5627,7 +5633,7 @@
         zeroconf
         zha
         zha-quirks
-      ]; # missing inputs: pygbl
+      ];
     "otp" =
       ps: with ps; [
         pyotp
@@ -6283,9 +6289,10 @@
         ha-silabs-firmware-client
         ifaddr
         psutil-home-assistant
+        pygbl
         serialx
         universal-silabs-flasher
-      ]; # missing inputs: pygbl
+      ];
     "raspyrfm" =
       ps: with ps; [
         raspyrfm-client
@@ -8756,11 +8763,12 @@
         aiousbwatcher
         ha-silabs-firmware-client
         ifaddr
+        pygbl
         serialx
         universal-silabs-flasher
         zha
         zha-quirks
-      ]; # missing inputs: pygbl
+      ];
     "zhong_hong" =
       ps: with ps; [
         zhong-hong-hvac
@@ -9219,6 +9227,11 @@
     "home_connect"
     "homeassistant"
     "homeassistant_alerts"
+    "homeassistant_connect_zbt2"
+    "homeassistant_green"
+    "homeassistant_hardware"
+    "homeassistant_sky_connect"
+    "homeassistant_yellow"
     "homee"
     "homekit"
     "homekit_controller"
@@ -9556,6 +9569,7 @@
     "orvibo"
     "osoenergy"
     "osram_infrared"
+    "otbr"
     "otp"
     "ouman_eh_800"
     "ourgroceries"
@@ -9644,6 +9658,7 @@
     "rainmachine"
     "random"
     "rapt_ble"
+    "raspberry_pi"
     "rdw"
     "recollect_waste"
     "recorder"
@@ -9998,6 +10013,7 @@
     "zeroconf"
     "zerproc"
     "zeversolar"
+    "zha"
     "zhong_hong"
     "zimi"
     "zinvolt"
