@@ -71,6 +71,7 @@ let
     mobile_app = getComponentDeps "frontend";
     mopeka = getComponentDeps "switchbot";
     mqtt = getComponentDeps "homeassistant_hardware";
+    music_assistant = getComponentDeps "homeassistant_hardware";
     nest = [
       av
     ];
